@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	
+
+
+	<!--指定web应用的默认编码集，相当于调用HttpServletRequest的setCharacterEncoding方法-->
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    
+    <!--该属性指定需要Struts 2处理的请求后缀，该属性的默认值是action，即所有匹配*.action的请求都由Struts 2处理
+        如果用户需要制定多个请求后缀，则多个后缀之间以英文逗号隔开-->
+    <constant name="struts.action.extension" value="action,do"></constant>
+    
+    <!--设置浏览器是否缓存静态内容，默认值为true，生产环境下使用，开发阶段最好关闭 -->
+    <constant name="struts.serve.static.browserCache" value="false"></constant>
+    
+    <!--当struts的配置文件修改后，系统是否自动重新加载该文件，默认值为false，生产环境下使用，开发阶段最好打开 -->
+    <constant name="struts.configuration.xml.reload" value="true"></constant>
+    
+    <!--开发模式下使用，可以打印出更详细的错误信息 -->
+    <constant name="struts.devMode" value="true" />
+    
+    <!-- 动态方法调用 false为不允许-->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+  	
+    <!-- 默认的视图主题,标签不支持label  ; theme属性包括xhtml,html,simple,ajax ,默认是xhtml-->
+    <constant name="struts.ui.theme" value="simple"></constant>
+    
+    <!-- 支持页面使用静态方法和属性 -->
+    <constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+    <!-- 设置上传文件大小     10M-->
+    <constant name="struts.multipart.maxSize" value="10000000000000"/>
+  
+     <package name="all_test" namespace="/gyq" extends="struts-default" >
+   		<action name="getform" class="gyq.struts2demo.tagaction.TagActionDemo" method="getForm">
+   			<result name="success">/WEB-INF/page/regist.jsp</result>
+   		</action>
+   		<action name="dosubmit" class="gyq.struts2demo.tagaction.TagActionDemo" method="dosubmit">
+   			<result name="success" >/WEB-INF/page/suc.jsp</result>
+   			<result name="input">/WEB-INF/page/Form.jsp</result>
+   		</action>
+   	 </package> 
+   	 <package name="upload" namespace="/" extends="struts-default" >
+   		<action name="upload" class="gyq.struts2upload.UploadAction">
+   			<result name="input">/WEB-INF/upload/Form.jsp</result>
+   			<result name="success" type="chain">
+   				<param name="actionName">download</param>
+   				<param name="namespace">/</param>
+   			</result>
+   		</action>
+   		<action name="getform">
+   			<result>/WEB-INF/upload/Form.jsp</result>
+   		</action>
+   	 </package> 
+   	 <package name="download" namespace="/" extends="upload">
+   		<action name="download" class="gyq.struts2download.DownloadAction">
+   			<result name="input">/WEB-INF/download/failure.jsp </result>
+   			<result name="success">/WEB-INF/upload/success.jsp</result>
+   		</action>
+   		<action name="truedownload" class="gyq.struts2download.TrueDownload">
+   			
+   			<result name="input">/WEB-INF/download/failure.jsp</result>
+   			<result name="success" type="stream">
+   				<param name="contentType">type</param>
+   				<param name="contentDisposition">
+   					attachment:filename="${downloadChineseFilename}"
+   				</param>
+   				<param name="inputName">downloadFile</param>
+   			</result>
+   		</action>
+   	 </package>
+</struts>
